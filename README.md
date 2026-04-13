@@ -1,1 +1,3 @@
-To do app with tags, categories, tasks, details for tasks, with the ability to edit/delete/update and much more.    
+Todo App - Angular + Django REST Framework
+
+A full-stack todo management application with JWT authentication, built with Angular 17+ and Django REST Framework.
