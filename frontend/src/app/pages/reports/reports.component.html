@@ -1,0 +1,30 @@
+<div class="page-container">
+  <div class="page-header">
+    <h2>Generate PDF Report</h2>
+    <button class="btn-secondary" routerLink="/dashboard">← Back</button>
+  </div>
+
+  @if (error) {
+    <div class="error-banner">{{ error }}</div>
+  }
+
+  <div class="card form-card">
+    <div class="field">
+      <label>From Date *</label>
+      <input type="date" [(ngModel)]="fromDate" name="fromDate" />
+      @if (fieldErrors['fromDate']) {
+        <div class="field-error">{{ fieldErrors['fromDate'] }}</div>
+      }
+    </div>
+    <div class="field">
+      <label>To Date *</label>
+      <input type="date" [(ngModel)]="toDate" name="toDate" />
+      @if (fieldErrors['toDate']) {
+        <div class="field-error">{{ fieldErrors['toDate'] }}</div>
+      }
+    </div>
+    <button class="btn-primary" (click)="generatePdf()" [disabled]="loading">
+      {{ loading ? 'Generating…' : 'Download PDF' }}
+    </button>
+  </div>
+</div>
