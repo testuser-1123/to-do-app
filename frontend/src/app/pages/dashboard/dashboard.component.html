@@ -1,0 +1,48 @@
+<div class="page-container">
+  @if (error) {
+    <div class="error-banner">{{ error }}</div>
+  }
+
+  @if (loading) {
+    <div class="loading">Loading your profile…</div>
+  }
+
+  @if (profile && !loading) {
+    <div class="dashboard-header">
+      <div>
+        <h2>Welcome, {{ profile.username }}</h2>
+        @if (!theme.isBrainFog) {
+          <p class="xp-info">XP: {{ profile.xp_points }} pts</p>
+          <div class="xp-bar"><div class="xp-fill" style="width: 45%"></div></div>
+        }
+      </div>
+      <div class="header-actions">
+        <button class="btn-secondary" (click)="toggleBrainFog()">
+          {{ theme.isBrainFog ? '🧠 Exit Brain Fog' : '🧠 Brain Fog Mode' }}
+        </button>
+        <button class="btn-danger" (click)="logout()">Logout</button>
+      </div>
+    </div>
+
+    <div class="nav-grid">
+      <a class="nav-card" routerLink="/tasks">
+        <div class="nav-icon">📋</div>
+        <div>Tasks</div>
+      </a>
+      <a class="nav-card" routerLink="/symptoms">
+        <div class="nav-icon">🩺</div>
+        <div>Symptoms</div>
+      </a>
+      @if (!theme.isBrainFog) {
+        <a class="nav-card" routerLink="/labs">
+          <div class="nav-icon">🔬</div>
+          <div>Lab Reports</div>
+        </a>
+        <a class="nav-card" routerLink="/reports">
+          <div class="nav-icon">📄</div>
+          <div>PDF Reports</div>
+        </a>
+      }
+    </div>
+  }
+</div>
