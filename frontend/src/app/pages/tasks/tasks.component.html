@@ -1,0 +1,95 @@
+<div class="page-container">
+  <div class="page-header">
+    <h2>Medical Tasks</h2>
+    <div>
+      <button class="btn-secondary" routerLink="/dashboard" style="margin-right: 0.5rem;">← Back</button>
+      <button class="btn-primary" (click)="showForm = !showForm">
+        {{ showForm ? 'Cancel' : '+ New Task' }}
+      </button>
+    </div>
+  </div>
+
+  @if (error) {
+    <div class="error-banner" role="alert">{{ error }}</div>
+  }
+
+  @if (showForm) {
+    <div class="card form-card">
+      <h3>New Task</h3>
+
+      @if (formError) {
+        <div class="field-error">{{ formError }}</div>
+      }
+
+      <div class="field">
+        <label>Title *</label>
+        <input type="text" [(ngModel)]="title" name="title" placeholder="Task title" />
+      </div>
+      <div class="field">
+        <label>Why this matters</label>
+        <textarea [(ngModel)]="consequenceText" name="consequenceText"
+          [class.big-text]="theme.isBrainFog"
+          placeholder="Consequence if skipped…"></textarea>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label>Due Date</label>
+          <input type="date" [(ngModel)]="dueDate" name="dueDate" />
+        </div>
+        <div class="field">
+          <label>Valid Until</label>
+          <input type="date" [(ngModel)]="validUntil" name="validUntil" />
+        </div>
+        <div class="field">
+          <label>Stock</label>
+          <input type="number" [(ngModel)]="currentStock" name="currentStock" min="0" />
+        </div>
+      </div>
+      <button class="btn-primary" (click)="saveTask()">Save Task</button>
+    </div>
+  }
+
+  @if (loading) {
+    <div class="loading">Loading tasks…</div>
+  }
+
+  @if (!loading && tasks.length === 0) {
+    <div class="empty-state">No tasks yet. Add one above.</div>
+  }
+
+  <div class="task-list">
+    @for (task of tasks; track task.id) {
+      <div class="card task-card" [class.done]="task.is_done">
+        <div class="task-header">
+          <span class="task-title">{{ task.title }}</span>
+          <span class="badge" [class]="'badge-' + task.priority">{{ task.priority }}</span>
+        </div>
+
+        @if (task.consequence_text) {
+          <p class="consequence" [class.big-text]="theme.isBrainFog">
+            <strong>Why:</strong> {{ task.consequence_text }}
+          </p>
+        }
+
+        @if (!theme.isBrainFog) {
+          <div class="task-meta">
+            @if (task.due_date) { <span>Due: {{ task.due_date }}</span> }
+            <span>Stock: {{ task.current_stock }}</span>
+          </div>
+          <div class="xp-bar">
+            <div class="xp-fill" [style.width]="task.is_done ? '100%' : '30%'"></div>
+          </div>
+        }
+
+        <div class="task-actions">
+          @if (!task.is_done) {
+            <button class="btn-success" (click)="markDone(task)">✓ Done</button>
+          } @else {
+            <span class="done-label">Completed</span>
+          }
+          <button class="btn-danger" (click)="deleteTask(task.id)">Delete</button>
+        </div>
+      </div>
+    }
+  </div>
+</div>  
