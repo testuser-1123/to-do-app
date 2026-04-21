@@ -1,0 +1,33 @@
+<div class="page-container">
+  <div class="page-header">
+    <h2>Notifications</h2>
+    <button class="btn-secondary" routerLink="/dashboard">← Back</button>
+  </div>
+
+  @if (error) {
+    <div class="error-banner">{{ error }}</div>
+  }
+
+  @if (loading) {
+    <div class="loading">Loading…</div>
+  }
+
+  @if (!loading && notifications.length === 0) {
+    <div class="empty-state">No active notifications.</div>
+  }
+
+  @for (n of notifications; track n.id) {
+    @if (!n.is_read || n.level === 'escalation') {
+      <div class="card notif-card notif-{{ n.level }}" [class.read]="n.is_read">
+        <div class="notif-header">
+          <span class="badge badge-{{ n.level }}">{{ n.level }}</span>
+          <span class="muted">{{ n.created_at | date:'short' }}</span>
+        </div>
+        <p>{{ n.message }}</p>
+        @if (n.level === 'escalation' && !n.is_read) {
+          <button class="btn-danger" (click)="clear(n)">Clear</button>
+        }
+      </div>
+    }
+  }
+</div>
