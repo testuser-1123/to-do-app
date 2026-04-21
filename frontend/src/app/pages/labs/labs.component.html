@@ -1,0 +1,68 @@
+<div class="page-container">
+  <div class="page-header">
+    <h2>Lab Reports</h2>
+    <button class="btn-secondary" routerLink="/dashboard">← Back</button>
+  </div>
+
+  @if (error) {
+    <div class="error-banner">{{ error }}</div>
+  }
+
+  <div class="card">
+    <h3>Upload Lab File</h3>
+    <div class="field-row file-upload-row">
+      <label class="custom-file-upload">
+        <input type="file" (change)="onFileSelected($event)" accept=".pdf,.jpg,.png" />
+        <span class="file-icon">📁</span>
+        <span class="file-label-text">
+          {{ selectedFile ? selectedFile.name : 'Click to select a file...' }}
+        </span>
+      </label>
+      <button class="btn-primary" (click)="uploadLab()" [disabled]="uploading || !selectedFile">
+        {{ uploading ? 'Uploading…' : 'Upload' }}
+      </button>
+    </div>
+  </div>
+
+  @if (loading) {
+    <div class="loading">Loading…</div>
+  }
+
+  @if (!loading && labs.length === 0) {
+    <div class="empty-state">No lab reports yet.</div>
+  }
+
+  @for (lab of labs; track lab.id) {
+    <div class="card lab-card">
+      <div class="lab-header">
+        <span>Report #{{ lab.id }}</span>
+        <span class="uploaded">{{ lab.uploaded_at | date:'shortDate' }}</span>
+
+        @if (lab.is_verified) {
+          <span class="badge badge-success">Verified</span>
+        } @else {
+          <span class="badge badge-warning">Needs Conclusion</span>
+        }
+      </div>
+
+      @if (!theme.isBrainFog) {
+        <a [href]="lab.file" target="_blank" class="link">View File</a>
+      }
+
+      @if (lab.is_verified) {
+        <p class="conclusion-text">{{ lab.transcribed_conclusion }}</p>
+      } @else {
+        <div class="field">
+          <label>Transcribed Conclusion</label>
+          <textarea
+            [(ngModel)]="transcribedConclusion[lab.id]"
+            [name]="'conclusion_' + lab.id"
+            placeholder="Enter your conclusion…"
+            rows="3">
+          </textarea>
+        </div>
+        <button class="btn-primary" (click)="saveConclusion(lab)">Save Conclusion</button>
+      }
+    </div>
+  }
+</div>      
