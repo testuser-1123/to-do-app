@@ -1,0 +1,42 @@
+<div class="auth-wrapper">
+  <div class="auth-card">
+    <h1>MedApp</h1>
+    <p class="subtitle">Sign in to your account</p>
+
+    @if (error) {
+      <div class="error-banner" role="alert">{{ error }}</div>
+    }
+
+    <form (ngSubmit)="onLogin()" novalidate>
+      <div class="field">
+        <label for="username">Username</label>
+        <input
+          id="username"
+          type="text"
+          [(ngModel)]="username"
+          name="username"
+          autocomplete="username"
+          placeholder="Enter username"
+          [disabled]="loading"
+        />
+      </div>
+
+      <div class="field">
+        <label for="password">Password</label>
+        <input
+          id="password"
+          type="password"
+          [(ngModel)]="password"
+          name="password"
+          autocomplete="current-password"
+          placeholder="Enter password"
+          [disabled]="loading"
+        />
+      </div>
+
+      <button type="submit" class="btn-primary" [disabled]="loading">
+        @if (loading) { Signing in… } @else { Sign In }
+      </button>
+    </form>
+  </div>
+</div>
