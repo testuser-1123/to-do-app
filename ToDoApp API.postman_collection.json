@@ -1,0 +1,617 @@
+{
+  "info": {
+    "_postman_id": "b3bc9727-c344-4318-9b59-1d590017f067",
+    "name": "ToDoApp API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "53616085",
+    "_collection_link": "https://go.postman.co/collection/53616085-b3bc9727-c344-4318-9b59-1d590017f067?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Auth",
+      "item": [
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const data = pm.response.json();",
+                  "pm.environment.set('access_token', data.access);",
+                  "pm.environment.set('refresh_token', data.refresh);",
+                  "pm.environment.set('username', data.username);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "auth": {
+              "type": "noauth"
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"username\":\"your_username\",\"password\":\"your_password\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/login/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "login",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Logout",
+          "event": [
+            {
+              "listen": "prerequest",
+              "script": {
+                "exec": [
+                  "pm.environment.set(\"access_token\", \"\");\r",
+                  "pm.environment.set(\"refresh_token\", \"\");\r",
+                  "console.log(\"Токены удалены из окружения\");"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"refresh\":\"{{refresh_token}}\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/logout/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "auth",
+                "logout",
+                ""
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Profile",
+      "item": [
+        {
+          "name": "Get Profile",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/profile/me/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "profile",
+                "me",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Profile",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"brain_fog_mode\":true}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/profile/me/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "profile",
+                "me",
+                ""
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Tasks",
+      "item": [
+        {
+          "name": "List Tasks",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/tasks/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "tasks",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Task",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const data = pm.response.json();",
+                  "pm.environment.set('task_id', data.id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"title\":\"Take vitamins\",\"consequence_text\":\"Helps with energy\",\"due_date\":\"2026-04-22\",\"valid_until\":\"2026-05-01\",\"current_stock\":3,\"is_done\":false,\"priority\":\"high\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/tasks/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "tasks",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Task",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/tasks/{{task_id}}/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "tasks",
+                "{{task_id}}",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Task",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"is_done\":true}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/tasks/{{task_id}}/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "tasks",
+                "{{task_id}}",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Task",
+          "request": {
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/tasks/{{task_id}}/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "tasks",
+                "{{task_id}}",
+                ""
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Symptoms",
+      "item": [
+        {
+          "name": "List Symptoms",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/symptoms/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "symptoms",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Search Symptoms",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/symptoms/search/?query=headache",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "symptoms",
+                "search",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "query",
+                  "value": "headache"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Symptom",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const data = pm.response.json();",
+                  "pm.environment.set('symptom_id', data.id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"name\":\"Nausea\",\"severity\":7,\"notes\":\"Mild after eating\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/symptoms/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "symptoms",
+                ""
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Labs",
+      "item": [
+        {
+          "name": "List Labs",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/labs/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "labs",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Upload Lab",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const data = pm.response.json();",
+                  "pm.environment.set('lab_id', data.id);"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "file",
+                  "type": "file",
+                  "value": ""
+                },
+                {
+                  "key": "transcribed_conclusion",
+                  "type": "text",
+                  "value": "Initial transcription text"
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/labs/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "labs",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Update Lab Conclusion",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"transcribed_conclusion\":\"Updated conclusion text\"}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/labs/{{lab_id}}/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "labs",
+                "{{lab_id}}",
+                ""
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Notifications",
+      "item": [
+        {
+          "name": "List Notifications",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const data = pm.response.json();",
+                  "if (Array.isArray(data) && data.length) {",
+                  "  pm.environment.set('notification_id', data[0].id);",
+                  "}"
+                ]
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/notifications/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "notifications",
+                ""
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Mark Notification As Read",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"is_read\":true}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/notifications/{{notification_id}}/",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "notifications",
+                "{{notification_id}}",
+                ""
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Reports",
+      "item": [
+        {
+          "name": "Generate PDF Report",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/reports/summary/pdf/?from_date=2026-04-01&to_date=2026-04-30",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "reports",
+                "summary",
+                "pdf",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "from_date",
+                  "value": "2026-04-01"
+                },
+                {
+                  "key": "to_date",
+                  "value": "2026-04-30"
+                }
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{access_token}}",
+        "type": "string"
+      }
+    ]
+  }
+}
