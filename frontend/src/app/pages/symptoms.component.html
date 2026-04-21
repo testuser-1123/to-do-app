@@ -1,0 +1,97 @@
+<div class="page-container">
+  <div class="page-header">
+    <h2>Symptoms</h2>
+    <button class="btn-secondary" routerLink="/dashboard">← Back</button>
+  </div>
+
+  @if (error) {
+    <div class="error-banner">{{ error }}</div>
+  }
+
+  <div class="card search-card">
+    <div class="field-row" style="margin-bottom: 0; align-items: center;">
+      <div class="search-input-wrapper flex-1">
+        <input type="text" [(ngModel)]="searchQuery" name="searchQuery"
+          placeholder="🔍 Search symptoms…" />
+      </div>
+      <button class="btn-primary" (click)="searchSymptom()" [disabled]="searching" style="margin-bottom: 0;">
+        {{ searching ? 'Searching…' : 'Search' }}
+      </button>
+    </div>
+
+    @if (searchResults.length > 0) {
+      <div class="search-results">
+        @for (r of searchResults; track r.id) {
+          <div class="result-item">
+            <div>
+               <strong>{{ r.name }}</strong> 
+               <span class="severity-badge sev-{{ r.severity > 7 ? 'high' : r.severity > 4 ? 'mid' : 'low' }}" style="margin-left: 0.5rem;">
+                 Sev: {{ r.severity }}
+               </span>
+            </div>
+            <span class="muted">{{ r.recorded_at | date:'shortDate' }}</span>
+          </div>
+        }
+      </div>
+    }
+  </div>
+
+  <div class="card form-card">
+    <h3>Record Symptom</h3>
+
+    @if (formError) {
+      <div class="field-error">{{ formError }}</div>
+    }
+
+    <div class="field">
+      <label>Symptom Name *</label>
+      <input type="text" [(ngModel)]="name" name="name" placeholder="e.g. Headache, Nausea" />
+    </div>
+    
+    <div class="field severity-field">
+      <label class="severity-label">
+        <span>Severity (1–10)</span>
+        <span class="severity-value sev-{{ severity > 7 ? 'high' : severity > 4 ? 'mid' : 'low' }}">
+          Level: {{ severity }}
+        </span>
+      </label>
+      <div class="range-wrapper">
+         <span class="range-min">1</span>
+         <input type="range" [(ngModel)]="severity" name="severity" min="1" max="10" />
+         <span class="range-max">10</span>
+      </div>
+    </div>
+    
+    <div class="field">
+      <label>Notes</label>
+      <textarea [(ngModel)]="notes" name="notes" placeholder="Any additional details or context..."></textarea>
+    </div>
+    
+    <button class="btn-primary" (click)="saveSymptom()">+ Save Symptom</button>
+  </div>
+
+  @if (loading) {
+    <div class="loading">Loading…</div>
+  }
+
+  @if (!loading && symptoms.length === 0) {
+    <div class="empty-state">No symptoms recorded yet.</div>
+  }
+
+  <div class="symptom-list">
+    @for (s of symptoms; track s.id) {
+      <div class="card symptom-card">
+        <div class="symptom-header">
+          <strong>{{ s.name }}</strong>
+          <span class="severity-badge sev-{{ s.severity > 7 ? 'high' : s.severity > 4 ? 'mid' : 'low' }}">
+            {{ s.severity }}/10
+          </span>
+        </div>
+        @if (s.notes) { <p class="muted" style="margin-top: 0.5rem; margin-bottom: 0;">{{ s.notes }}</p> }
+        <div style="margin-top: 0.5rem;">
+          <small class="muted">{{ s.recorded_at | date:'medium' }}</small>
+        </div>
+      </div>
+    }
+  </div>
+</div>
